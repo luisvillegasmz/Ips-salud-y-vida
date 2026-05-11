@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-Pagina4Application<pagina4>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.pagina.pagina4.Pagina4Application",
+            "projectName": "pagina4",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
