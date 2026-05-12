@@ -35,11 +35,9 @@
                     <span th:unless="${u.activo}" class="badge bg-secondary">Inactivo</span>
                 </td>
                 <td>
-                    <!-- AC-3: Editar -->
                     <a th:href="@{/usuarios/editar/{id}(id=${u.id})}"
                        class="btn btn-sm btn-warning">Editar</a>
 
-                    <!-- AC-4: Inactivar -->
                     <form th:action="@{/usuarios/inactivar/{id}(id=${u.id})}"
                           method="post" style="display:inline"
                           th:if="${u.activo}">
@@ -53,7 +51,6 @@
         </tbody>
     </table>
 
-    
     <a href="/dashboard" class="btn btn-secondary mt-2">Volver al Dashboard</a>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
