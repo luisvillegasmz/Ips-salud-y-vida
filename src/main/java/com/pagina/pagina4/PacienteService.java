@@ -1,0 +1,48 @@
+package com.pagina.pagina4;
+
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service
+public class PacienteService {
+
+    private final PacienteRepository pacienteRepository;
+
+    public PacienteService(PacienteRepository pacienteRepository) {
+        this.pacienteRepository = pacienteRepository;
+    }
+
+    // AC-3 + AC-6: Validaciones y registro
+    public Paciente registrarPaciente(Paciente paciente) {
+
+        // AC-3: Número de documento no vacío
+        if (paciente.getNumeroDocumento() == null ||
+            paciente.getNumeroDocumento().trim().isEmpty()) {
+            throw new RuntimeException("El número de documento no puede estar vacío.");
+        }
+
+        // AC-3: No negativo (para documentos numéricos)
+        if (paciente.getNumeroDocumento().matches("\\d+")) {
+            long numero = Long.parseLong(paciente.getNumeroDocumento());
+            if (numero <= 0) {
+                throw new RuntimeException("El número de documento no puede ser negativo o cero.");
+            }
+        }
+
+        // AC-6: Verificar que no esté ya registrado
+        if (pacienteRepository.existsByNumeroDocumento(paciente.getNumeroDocumento())) {
+            throw new RuntimeException("Ya existe un paciente registrado con ese número de documento.");
+        }
+
+        return pacienteRepository.save(paciente);
+    }
+
+    public List<Paciente> obtenerTodos() {
+        return pacienteRepository.findAll();
+    }
+
+    public Paciente obtenerPorId(Long id) {
+        return pacienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Paciente no encontrado."));
+    }
+}
