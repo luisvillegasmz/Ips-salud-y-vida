@@ -8,5 +8,6 @@ public interface PacienteRepository extends JpaRepository<Paciente, Long> {
     // AC-6: Verificar si ya existe por número de documento
     boolean existsByNumeroDocumento(String numeroDocumento);
 
+    
     Optional<Paciente> findByNumeroDocumento(String numeroDocumento);
 }

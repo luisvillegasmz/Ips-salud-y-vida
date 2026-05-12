@@ -15,6 +15,7 @@ public class PacienteService {
     // AC-3 + AC-6: Validaciones y registro
     public Paciente registrarPaciente(Paciente paciente) {
 
+        
         // AC-3: Número de documento no vacío
         if (paciente.getNumeroDocumento() == null ||
             paciente.getNumeroDocumento().trim().isEmpty()) {

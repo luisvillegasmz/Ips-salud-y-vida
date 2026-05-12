@@ -59,6 +59,7 @@ public class UsuarioController {
         }
     }
 
+    
     // AC-4: Inactivar usuario
     @PostMapping("/inactivar/{id}")
     public String inactivarUsuario(@PathVariable Long id) {

@@ -32,6 +32,7 @@ public class Paciente {
     @Column(nullable = false)
     private String apellidos;
 
+    
     // AC-5: Fecha de nacimiento
     @Column(nullable = false)
     private LocalDate fechaNacimiento;

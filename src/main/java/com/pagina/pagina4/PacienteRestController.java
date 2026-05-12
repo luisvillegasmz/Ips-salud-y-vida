@@ -13,6 +13,7 @@ public class PacienteRestController {
         this.pacienteService = pacienteService;
     }
 
+    
     // AC-7 + AC-10: Retorna objeto Paciente guardado en JSON
     @PostMapping
     public ResponseEntity<?> registrar(@RequestBody Paciente paciente) {

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class DashboardController {
 
+    
     @GetMapping("/dashboard")
     public String mostrarDashboard(HttpSession session, Model model) {
         // Proteger la ruta: si no hay sesión, redirigir al login

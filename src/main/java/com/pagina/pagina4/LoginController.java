@@ -55,6 +55,7 @@ public class LoginController {
         }
     }
 
+    
     @GetMapping("/logout")
     public String cerrarSesion(HttpSession session) {
         String nombre = session.getAttribute("nombreUsuario") != null

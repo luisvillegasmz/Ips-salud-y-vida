@@ -31,6 +31,7 @@ public class PacienteController {
         this.pacienteService = pacienteService;
     }
 
+    
     // AC-1: Cargar tipos de documento en el formulario
     @GetMapping("/registro")
     public String mostrarFormulario(
