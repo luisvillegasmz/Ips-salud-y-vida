@@ -1,5 +1,4 @@
 package com.pagina.pagina4;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class RegistroController {
-
     private static final Logger logger = LoggerFactory.getLogger(RegistroController.class);
     private final UsuarioService usuarioService;
 
@@ -20,7 +18,7 @@ public class RegistroController {
 
     @GetMapping("/registro")
     public String mostrarRegistro() {
-        return "registro";
+        return "HU01-03/registro";
     }
 
     @PostMapping("/registro")
@@ -33,13 +31,11 @@ public class RegistroController {
             @RequestParam String celular,
             @RequestParam String password,
             Model model) {
-
         if (nombre.trim().isEmpty() || username.trim().isEmpty() ||
             email.trim().isEmpty() || password.trim().isEmpty()) {
             model.addAttribute("error", "Por favor, completa todos los campos obligatorios.");
-            return "registro";
+            return "HU01-03/registro";
         }
-
         try {
             Usuario nuevo = new Usuario();
             nuevo.setNombre(nombre);
@@ -49,15 +45,13 @@ public class RegistroController {
             nuevo.setDireccion(direccion);
             nuevo.setCelular(celular);
             nuevo.setPassword(password);
-
             usuarioService.registrarUsuario(nuevo);
             logger.info("Usuario registrado: {} ({})", username, email);
             return "redirect:/inicioSesion";
-
         } catch (RuntimeException e) {
             logger.warn("Error en registro: {}", e.getMessage());
             model.addAttribute("error", e.getMessage());
-            return "registro";
+            return "HU01-03/registro";
         }
     }
 }

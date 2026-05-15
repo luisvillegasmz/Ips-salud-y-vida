@@ -1,5 +1,4 @@
 package com.pagina.pagina4;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/usuarios")
 public class UsuarioController {
-
     private static final Logger logger = LoggerFactory.getLogger(UsuarioController.class);
     private final UsuarioService usuarioService;
 
@@ -17,21 +15,18 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    // AC-2 + AC-6: Listar usuarios con @GetMapping
     @GetMapping
     public String listarUsuarios(Model model) {
         model.addAttribute("usuarios", usuarioService.obtenerTodosLosUsuarios());
-        return "listarUsuarios";
+        return "HU01-03/listarUsuarios";
     }
 
-    // AC-3: Mostrar formulario de edición
     @GetMapping("/editar/{id}")
     public String mostrarEdicion(@PathVariable Long id, Model model) {
         model.addAttribute("usuario", usuarioService.obtenerPorId(id));
-        return "editarUsuario";
+        return "HU01-03/editarUsuario";
     }
 
-    // AC-3 + AC-6: Guardar edición con @PostMapping
     @PostMapping("/editar/{id}")
     public String procesarEdicion(
             @PathVariable Long id,
@@ -40,27 +35,22 @@ public class UsuarioController {
             @RequestParam String direccion,
             @RequestParam String celular,
             Model model) {
-
         try {
             Usuario datos = new Usuario();
             datos.setNombre(nombre);
             datos.setApellido(apellido);
             datos.setDireccion(direccion);
             datos.setCelular(celular);
-
             usuarioService.actualizarUsuario(id, datos);
             logger.info("Usuario ID {} actualizado.", id);
             return "redirect:/usuarios";
-
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("usuario", usuarioService.obtenerPorId(id));
-            return "editarUsuario";
+            return "HU01-03/editarUsuario"; // ✅ CORREGIDO
         }
     }
 
-    
-    // AC-4: Inactivar usuario
     @PostMapping("/inactivar/{id}")
     public String inactivarUsuario(@PathVariable Long id) {
         usuarioService.inactivarUsuario(id);
