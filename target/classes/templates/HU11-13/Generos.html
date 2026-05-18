@@ -1,125 +1,92 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Géneros</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet">
-
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Géneros | Salud y Vida IPS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="icon" th:href="@{/img/LogoSinLetras.png}" type="image/png">
 </head>
-
 <body>
 
-<div class="contenedor">
+<div class="login-wrapper" style="align-items: flex-start; padding-top: 2rem;">
+    <div class="card-login card-full">
 
-    <div class="encabezado">
-
-        <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png"
-             class="logo">
-
-        <h3>Géneros</h3>
-
-        <div class="icono-superior">
-            <i class="bi bi-person-lines-fill"></i>
+        <div class="page-header">
+            <div class="page-header-left">
+                <img th:src="@{/img/Logo.png}" src="/img/Logo.png" alt="Logo Salud y Vida IPS">
+                <div>
+                    <p class="page-title">Géneros</p>
+                    <p class="page-meta">Catálogo de géneros del sistema</p>
+                </div>
+            </div>
+            <a href="/dashboard" class="btn-volver">← Volver al inicio</a>
         </div>
 
-    </div>
+        <div th:if="${exito}" class="alert alert-success py-2 px-3 mb-3" th:text="${exito}"></div>
+        <div th:if="${error}" class="alert alert-danger py-2 px-3 mb-3" th:text="${error}"></div>
 
-    <div th:if="${exito}" class="alert alert-success">
-        <span th:text="${exito}"></span>
-    </div>
+        <!-- Formulario -->
+        <form th:action="@{/catalogos/genero/guardar}"
+              th:object="${genero}" method="post"
+              class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
 
-    <div th:if="${error}" class="alert alert-danger">
-        <span th:text="${error}"></span>
-    </div>
+            <input type="hidden" th:field="*{id}">
 
-    <form th:action="@{/catalogos/genero/guardar}"
-          th:object="${genero}"
-          method="post">
-
-        <input type="hidden" th:field="*{id}">
-
-        <div class="fila-formulario">
-
-            <div>
-
-                <label>Nombre del género*</label>
-
-                <input type="text"
-                       th:field="*{nombre}"
-                       class="form-control"
-                       placeholder="Ej: Masculino">
-
+            <div class="col-span-2">
+                <label class="form-label-ips">Nombre del género <span class="required">*</span></label>
+                <input type="text" th:field="*{nombre}" class="input-login"
+                       placeholder="Ej: Masculino" required maxlength="50">
             </div>
 
+            <div class="flex items-end">
+                <button type="submit" class="btn-acceder btn-acceder-full">
+                    Guardar género
+                </button>
+            </div>
+        </form>
+
+        <!-- Tabla -->
+        <div style="overflow-x: auto;">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="genero : ${generos}">
+                        <td th:text="${genero.id}"></td>
+                        <td th:text="${genero.nombre}"></td>
+                        <td>
+                            <span th:if="${genero.activo}" class="badge-activo">Activo</span>
+                            <span th:unless="${genero.activo}" class="badge-inactivo">Inactivo</span>
+                        </td>
+                        <td style="display:flex; gap:6px; align-items:center;">
+                            <a th:href="@{/catalogos/genero/editar/{id}(id=${genero.id})}"
+                               class="btn-editar">Editar</a>
+                            <a th:href="@{/catalogos/genero/estado/{id}(id=${genero.id})}"
+                               class="btn-inactivar"
+                               onclick="return confirm('¿Cambiar estado?')">
+                                Cambiar estado
+                            </a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(generos)}">
+                        <td colspan="4" class="sin-registros">No hay géneros registrados.</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        <button type="submit" class="btn-guardar">
-            Guardar género
-        </button>
-
-    </form>
-
-    <table class="table table-bordered tabla-documentos">
-
-        <thead>
-
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-
-        </thead>
-
-        <tbody>
-
-        <tr th:each="genero : ${generos}">
-
-            <td th:text="${genero.id}"></td>
-
-            <td th:text="${genero.nombre}"></td>
-
-            <td>
-
-                <span th:if="${genero.activo}"
-                      class="estado-activo">
-                    Activo
-                </span>
-
-                <span th:unless="${genero.activo}"
-                      class="estado-inactivo">
-                    Inactivo
-                </span>
-
-            </td>
-
-            <td class="acciones">
-
-                <a th:href="@{/catalogos/genero/editar/{id}(id=${genero.id})}">
-                    <i class="bi bi-pencil-square"></i>
-                </a>
-
-                <a th:href="@{/catalogos/genero/estado/{id}(id=${genero.id})}">
-                    <i class="bi bi-arrow-repeat"></i>
-                </a>
-
-            </td>
-
-        </tr>
-
-        </tbody>
-
-    </table>
-
+    </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -12,10 +12,8 @@ import org.springframework.web.bind.annotation.*;
 public class MotivoConsultaController {
 
     private static final Logger logger = LoggerFactory.getLogger(MotivoConsultaController.class);
-
     private final MotivoConsultaService service;
     private final PacienteService pacienteService;
-
     private static final java.util.List<String> SEVERIDADES =
             java.util.List.of("Leve", "Moderado", "Severo");
 
@@ -25,23 +23,19 @@ public class MotivoConsultaController {
         this.pacienteService = pacienteService;
     }
 
-    /* ── MOSTRAR FORMULARIO ──────────────────────────────────────── */
     @GetMapping("/{pacienteId}")
     public String mostrar(@PathVariable Long pacienteId,
                           @RequestParam(required = false) String exito,
                           Model model, HttpSession session) {
 
         if (session.getAttribute("usuarioActivo") == null) return "redirect:/inicioSesion";
-
-        Paciente paciente = pacienteService.obtenerPorId(pacienteId);
-        model.addAttribute("paciente", paciente);
+        model.addAttribute("paciente", pacienteService.obtenerPorId(pacienteId));
         model.addAttribute("severidades", SEVERIDADES);
         model.addAttribute("historial", service.porPaciente(pacienteId));
-        if (exito != null) model.addAttribute("exito", "Motivo de consulta registrado exitosamente.");
-        return "HU024/motivoConsulta";
+        if (exito != null) model.addAttribute("exito", "Consulta registrada exitosamente.");
+        return "HU24-30/MotivoConsulta";
     }
 
-    /* ── PROCESAR FORMULARIO ─────────────────────────────────────── */
     @PostMapping("/{pacienteId}")
     public String procesar(
             @PathVariable Long pacienteId,
@@ -56,19 +50,22 @@ public class MotivoConsultaController {
 
         if (session.getAttribute("usuarioActivo") == null) return "redirect:/inicioSesion";
 
+        // ✅ AC-4 HU-024: captura el médico desde la sesión activa
+        Usuario medico = (Usuario) session.getAttribute("usuarioActivo");
+        String nombreMedico = medico.getNombre() + " " + medico.getApellido();
+
         try {
-            service.registrar(pacienteId, descripcionSintomas,
+            service.registrar(pacienteId, descripcionSintomas, nombreMedico,
                     fiebre, tos, dolorAbdominal, nauseas, mareo, fatiga);
-            logger.info("Motivo de consulta registrado para pacienteId={}", pacienteId);
+            logger.info("Consulta registrada - pacienteId={}, médico={}", pacienteId, nombreMedico);
             return "redirect:/consulta/motivo/" + pacienteId + "?exito=true";
         } catch (RuntimeException e) {
-            logger.warn("Error al registrar motivo consulta: {}", e.getMessage());
-            Paciente paciente = pacienteService.obtenerPorId(pacienteId);
-            model.addAttribute("paciente", paciente);
+            logger.warn("Error al registrar consulta: {}", e.getMessage());
+            model.addAttribute("paciente", pacienteService.obtenerPorId(pacienteId));
             model.addAttribute("severidades", SEVERIDADES);
             model.addAttribute("historial", service.porPaciente(pacienteId));
             model.addAttribute("error", e.getMessage());
-            return "HU024/motivoConsulta";
+            return "HU24-30/MotivoConsulta";
         }
     }
 }

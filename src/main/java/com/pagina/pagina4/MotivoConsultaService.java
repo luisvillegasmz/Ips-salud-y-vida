@@ -15,14 +15,18 @@ public class MotivoConsultaService {
         this.pacienteRepo = pacienteRepo;
     }
 
-    public MotivoConsulta registrar(Long pacienteId,
-                                    String descripcion,
+    public MotivoConsulta registrar(Long pacienteId, String descripcion,
+                                    String nombreMedico,
                                     String fiebre, String tos,
                                     String dolorAbdominal, String nauseas,
                                     String mareo, String fatiga) {
 
         if (descripcion == null || descripcion.trim().isEmpty()) {
             throw new RuntimeException("La descripción de síntomas es obligatoria.");
+        }
+        // ✅ AC-5 HU-024: longitud mínima
+        if (descripcion.trim().length() < 10) {
+            throw new RuntimeException("La descripción debe tener al menos 10 caracteres.");
         }
 
         Paciente paciente = pacienteRepo.findById(pacienteId)
@@ -31,13 +35,13 @@ public class MotivoConsultaService {
         MotivoConsulta m = new MotivoConsulta();
         m.setPaciente(paciente);
         m.setDescripcionSintomas(descripcion.trim());
-        m.setFiebre(nullIfVacio(fiebre));
-        m.setTos(nullIfVacio(tos));
-        m.setDolorAbdominal(nullIfVacio(dolorAbdominal));
-        m.setNauseas(nullIfVacio(nauseas));
-        m.setMareo(nullIfVacio(mareo));
-        m.setFatiga(nullIfVacio(fatiga));
-
+        m.setNombreMedico(nombreMedico != null ? nombreMedico : "Sin asignar"); // ✅ AC-4
+        m.setFiebre(nvl(fiebre));
+        m.setTos(nvl(tos));
+        m.setDolorAbdominal(nvl(dolorAbdominal));
+        m.setNauseas(nvl(nauseas));
+        m.setMareo(nvl(mareo));
+        m.setFatiga(nvl(fatiga));
         return repo.save(m);
     }
 
@@ -45,7 +49,7 @@ public class MotivoConsultaService {
         return repo.findByPacienteIdOrderByFechaRegistroDesc(pacienteId);
     }
 
-    private String nullIfVacio(String v) {
+    private String nvl(String v) {
         return (v == null || v.trim().isEmpty()) ? null : v.trim();
     }
 }

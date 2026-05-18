@@ -1,8 +1,5 @@
 package com.pagina.pagina4;
 
-import com.pagina.pagina4.TipoDocumento;
-import com.pagina.pagina4.TipoDocumentoRepository;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

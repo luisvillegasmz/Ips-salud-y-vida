@@ -36,7 +36,7 @@ public class DiagnosticoCIE10Controller {
         model.addAttribute("diagnosticos", service.buscar(q));
         model.addAttribute("q", q);
         if (exito != null) model.addAttribute("exito", exito);
-        return "HU026/catalogoCIE10";
+        return "HU24-30/Catalogocie10"; // ✅ Ruta corregida
     }
 
     /* ── FORMULARIO AÑADIR ──────────────────────────────────────────── */
@@ -46,7 +46,7 @@ public class DiagnosticoCIE10Controller {
         model.addAttribute("diagnostico", new DiagnosticoCIE10());
         model.addAttribute("categorias", CATEGORIAS);
         model.addAttribute("modoEdicion", false);
-        return "HU026/formCIE10";
+        return "HU24-30/FormCie10"; // ✅ Ruta corregida
     }
 
     @PostMapping("/nuevo")
@@ -71,9 +71,11 @@ public class DiagnosticoCIE10Controller {
             model.addAttribute("categorias", CATEGORIAS);
             model.addAttribute("modoEdicion", false);
             DiagnosticoCIE10 d = new DiagnosticoCIE10();
-            d.setCodigo(codigo); d.setDiagnostico(diagnostico); d.setCategoria(categoria);
+            d.setCodigo(codigo);
+            d.setDiagnostico(diagnostico);
+            d.setCategoria(categoria);
             model.addAttribute("diagnostico", d);
-            return "HU026/formCIE10";
+            return "HU24-30/FormCie10"; // ✅ Ruta corregida
         }
     }
 
@@ -84,7 +86,7 @@ public class DiagnosticoCIE10Controller {
         model.addAttribute("diagnostico", service.obtenerPorId(id));
         model.addAttribute("categorias", CATEGORIAS);
         model.addAttribute("modoEdicion", true);
-        return "HU026/formCIE10";
+        return "HU24-30/FormCie10"; // ✅ Ruta corregida
     }
 
     @PostMapping("/editar/{id}")
@@ -110,13 +112,15 @@ public class DiagnosticoCIE10Controller {
             model.addAttribute("categorias", CATEGORIAS);
             model.addAttribute("modoEdicion", true);
             DiagnosticoCIE10 d = service.obtenerPorId(id);
-            d.setCodigo(codigo); d.setDiagnostico(diagnostico); d.setCategoria(categoria);
+            d.setCodigo(codigo);
+            d.setDiagnostico(diagnostico);
+            d.setCategoria(categoria);
             model.addAttribute("diagnostico", d);
-            return "HU026/formCIE10";
+            return "HU24-30/FormCie10"; // ✅ Ruta corregida
         }
     }
 
-    /* ELIMINAR  */
+    /* ── ELIMINAR ───────────────────────────────────────────────────── */
     @PostMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Long id, HttpSession session) {
         if (session.getAttribute("usuarioActivo") == null) return "redirect:/inicioSesion";

@@ -6,29 +6,26 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Getter @Setter @NoArgsConstructor
 @Entity
-@Table(name = "motivos_consulta")
+@Table(name = "contactos_clinicos") // ✅ AC-7 HU-024: nombre correcto
 public class MotivoConsulta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /** Paciente asociado (FK) */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "paciente_id", nullable = false)
     private Paciente paciente;
 
-    /** Texto libre de descripción de síntomas */
+    // ✅ AC-4 HU-024: médico que atiende
+    @Column(nullable = false)
+    private String nombreMedico;
+
     @Column(nullable = false, length = 1000)
     private String descripcionSintomas;
 
-    /* ── Síntomas con severidad ──────────────────────────────────── */
-
-    /** Sin síntoma = null; valores: Leve, Moderado, Severo */
     private String fiebre;
     private String tos;
     private String dolorAbdominal;
@@ -36,7 +33,7 @@ public class MotivoConsulta {
     private String mareo;
     private String fatiga;
 
-    /** Fecha y hora de registro */
+    // ✅ AC-2 HU-024: fecha capturada automáticamente en Java
     @Column(nullable = false)
     private LocalDateTime fechaRegistro = LocalDateTime.now();
 }

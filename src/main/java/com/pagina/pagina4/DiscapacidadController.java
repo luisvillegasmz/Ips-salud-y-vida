@@ -22,10 +22,8 @@ public class DiscapacidadController {
     }
 
     @GetMapping
-    public String listar(
-            @RequestParam(required = false) String exito,
-            Model model) {
-        model.addAttribute("discapacidades", discapacidadService.listarTodas());
+    public String listar(@RequestParam(required = false) String exito, Model model) {
+        model.addAttribute("discapacidades", discapacidadService.listarActivas());
         if (exito != null) model.addAttribute("exito", "Operación realizada correctamente.");
         return "HU16-18/listarDiscapacidades";
     }
