@@ -39,4 +39,13 @@ public class Paciente {
 
     @Column
     private String estadoCivil;
+
+    @Column
+    private String genero;
+
+    @Column
+    private String departamento;
+
+    @Column
+    private String municipio;
 }

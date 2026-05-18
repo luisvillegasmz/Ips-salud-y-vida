@@ -517,6 +517,139 @@ body {
 .form-grid-full { grid-column: 1 / -1; }
 
 /* ══════════════════════════════════════
+   TEXTAREA
+══════════════════════════════════════ */
+.textarea-ips {
+    background-color: #f1f4f8;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 0.92rem;
+    color: #444;
+    width: 100%;
+    display: block;
+    resize: vertical;
+    min-height: 110px;
+    font-family: inherit;
+}
+
+.textarea-ips:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(30, 90, 60, 0.25);
+    background-color: #e8eef4;
+}
+
+.textarea-ips::placeholder { color: #9aa5b0; }
+
+/* ══════════════════════════════════════
+   BÚSQUEDA DE PACIENTES
+══════════════════════════════════════ */
+.hu-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.75rem;
+}
+.hu-header-logo img { height: 56px; width: auto; }
+.hu-header-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1b3a5c;
+    margin: 0;
+    text-align: center;
+    flex: 1;
+}
+.hu-header-actions { display: flex; gap: 8px; align-items: center; }
+
+.icon-btn {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: #1b3a5c;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    overflow: hidden;
+    text-decoration: none;
+}
+.icon-btn:hover { background: #142d47; transform: scale(1.07); }
+.icon-btn img { width: 24px; height: 24px; object-fit: contain; filter: brightness(10); }
+
+.search-panel {
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #e5e7eb;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.search-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+    display: block;
+}
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f1f4f8;
+    border-radius: 8px;
+    padding: 0 14px;
+    border: 1.5px solid transparent;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-input-wrapper:focus-within {
+    border-color: #1b3a5c;
+    box-shadow: 0 0 0 2px rgba(27,58,92,0.12);
+}
+.search-input-wrapper svg { flex-shrink: 0; color: #9aa5b0; }
+.search-input-wrapper input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 11px 0;
+    font-size: 0.9rem;
+    color: #374151;
+}
+.search-input-wrapper input::placeholder { color: #9aa5b0; }
+
+.filter-chips { display: flex; gap: 8px; margin-top: 12px; }
+.chip {
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1.5px solid #cbd5e1;
+    background: #f8fafc;
+    color: #374151;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.chip:hover, .chip.active {
+    background: #1b3a5c;
+    border-color: #1b3a5c;
+    color: #ffffff;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #9ca3af;
+    font-size: 0.9rem;
+}
+.empty-state svg { margin: 0 auto 12px; display: block; opacity: 0.4; }
+
+.th-sortable {
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+.th-sortable:hover { background-color: #162e4a; }
+
+/* ══════════════════════════════════════
    RESPONSIVO
 ══════════════════════════════════════ */
 @media (max-width: 640px) {

@@ -15,35 +15,29 @@
     <div class="card-login card-wide">
 
         <div class="logo-area">
-            <img th:src="@{/img/Logo.png}" src="/img/Logo.png"
-                 alt="Logo Salud y Vida IPS">
+            <img th:src="@{/img/Logo.png}" src="/img/Logo.png" alt="Logo Salud y Vida IPS">
         </div>
 
         <p class="login-title">Registro de Paciente</p>
-        <p class="page-subtitle-text">Complete los datos de identidad del paciente</p>
+        <p class="page-subtitle-text">Complete los datos de identidad y atención del paciente</p>
 
-        <!-- AC-9: Mensaje éxito -->
         <div th:if="${exito}" class="alert-exito">
             <span th:text="${exito}"></span>
         </div>
-
-        <!-- Mensaje error -->
         <div th:if="${error}" class="alert-error">
             ⚠ <span th:text="${error}"></span>
         </div>
 
-        <!-- AC-8: Grid responsivo con Tailwind -->
         <form action="/pacientes/registro" method="post"
               class="grid grid-cols-1 md:grid-cols-2 gap-4"
               id="formPaciente">
 
-            <!-- AC-1: Select tipo de documento -->
+            <!-- Tipo de documento -->
             <div class="col-span-1 md:col-span-2">
                 <label for="tipoDocumento" class="form-label-ips">
                     Tipo de documento <span class="required">*</span>
                 </label>
-                <select id="tipoDocumento" name="tipoDocumento"
-                        class="select-ips" required>
+                <select id="tipoDocumento" name="tipoDocumento" class="select-ips" required>
                     <option value="" disabled selected>-- Seleccione --</option>
                     <option th:each="tipo : ${tiposDocumento}"
                             th:value="${tipo.codigo}"
@@ -52,57 +46,65 @@
                 </select>
             </div>
 
-            <!-- AC-2: Número de documento -->
+            <!-- Número de documento -->
             <div class="col-span-1 md:col-span-2">
                 <label for="numeroDocumento" class="form-label-ips">
                     Número de documento <span class="required">*</span>
                 </label>
                 <input type="text" class="input-login"
                        id="numeroDocumento" name="numeroDocumento"
-                       placeholder="Ej: 1023456789"
-                       required
-                       title="No puede estar vacío ni ser negativo">
+                       placeholder="Ej: 1023456789" required>
             </div>
 
-            <!-- AC-4: Nombres -->
+            <!-- Nombres -->
             <div>
                 <label for="nombres" class="form-label-ips">
                     Nombres <span class="required">*</span>
                 </label>
                 <input type="text" class="input-login"
                        id="nombres" name="nombres"
-                       placeholder="Ej: Juan Carlos"
-                       required
+                       placeholder="Ej: Juan Carlos" required
                        pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]{2,80}">
             </div>
 
-            <!-- AC-4: Apellidos -->
+            <!-- Apellidos -->
             <div>
                 <label for="apellidos" class="form-label-ips">
                     Apellidos <span class="required">*</span>
                 </label>
                 <input type="text" class="input-login"
                        id="apellidos" name="apellidos"
-                       placeholder="Ej: Pérez Gómez"
-                       required
+                       placeholder="Ej: Pérez Gómez" required
                        pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]{2,80}">
             </div>
 
-            <!-- AC-5: Fecha de nacimiento -->
-            <div class="col-span-1 md:col-span-2">
+            <!-- Fecha de nacimiento -->
+            <div>
                 <label for="fechaNacimiento" class="form-label-ips">
                     Fecha de nacimiento <span class="required">*</span>
                 </label>
                 <input type="date" class="input-login"
-                       id="fechaNacimiento" name="fechaNacimiento"
-                       required>
+                       id="fechaNacimiento" name="fechaNacimiento" required>
+            </div>
+
+            <!-- Género -->
+            <div>
+                <label for="genero" class="form-label-ips">Género</label>
+                <select id="genero" name="genero" class="select-ips">
+                    <option value="">-- Seleccione --</option>
+                    <option th:each="gen : ${generos}"
+                            th:if="${gen.activo}"
+                            th:value="${gen.nombre}"
+                            th:text="${gen.nombre}">
+                    </option>
+                </select>
             </div>
 
             <!-- Estado civil -->
-            <div class="col-span-1 md:col-span-2">
+            <div>
                 <label for="estadoCivil" class="form-label-ips">Estado civil</label>
                 <select id="estadoCivil" name="estadoCivil" class="select-ips">
-                    <option value="" selected>-- Seleccione --</option>
+                    <option value="">-- Seleccione --</option>
                     <option th:each="estado : ${estadosCiviles}"
                             th:if="${estado.activo}"
                             th:value="${estado.nombre}"
@@ -111,12 +113,73 @@
                 </select>
             </div>
 
+            <!-- Departamento -->
+            <div>
+                <label for="deptoSelect" class="form-label-ips">Departamento</label>
+                <select id="deptoSelect" name="departamento" class="select-ips"
+                        onchange="filtrarMunicipios()">
+                    <option value="">-- Seleccione --</option>
+                    <option th:each="dep : ${departamentos}"
+                            th:if="${dep.activo}"
+                            th:value="${dep.nombre}"
+                            th:attr="data-id=${dep.id}"
+                            th:text="${dep.nombre}">
+                    </option>
+                </select>
+            </div>
+
+            <!-- Municipio (filtrado por departamento con JS) -->
+            <div>
+                <label for="muniSelect" class="form-label-ips">Municipio</label>
+                <select id="muniSelect" name="municipio" class="select-ips">
+                    <option value="">-- Seleccione departamento primero --</option>
+                    <option th:each="mun : ${municipios}"
+                            th:value="${mun.nombre}"
+                            th:attr="data-depto=${mun.departamento.id}"
+                            th:text="${mun.nombre}"
+                            hidden="hidden">
+                    </option>
+                </select>
+            </div>
+
+            <!-- ── Sección de atención médica ── -->
+            <div class="col-span-1 md:col-span-2 mt-2">
+                <p class="login-title" style="text-align:left; font-size:0.9rem; margin-bottom:0.5rem;">
+                    Atención Médica
+                </p>
+            </div>
+
+            <!-- Diagnóstico CIE-10 -->
+            <div class="col-span-1 md:col-span-2">
+                <label for="codigoCIE10" class="form-label-ips">Diagnóstico CIE-10</label>
+                <select id="codigoCIE10" name="codigoCIE10" class="select-ips">
+                    <option value="">-- Sin diagnóstico --</option>
+                    <option th:each="dx : ${diagnosticoscie10}"
+                            th:value="${dx.codigo}"
+                            th:text="${dx.codigo + ' — ' + dx.diagnostico}">
+                    </option>
+                </select>
+            </div>
+
+            <!-- Motivo de consulta (AC-1 HU-024) -->
+            <div class="col-span-1 md:col-span-2">
+                <label for="motivoConsulta" class="form-label-ips">
+                    Motivo de consulta
+                    <span style="font-weight:400; color:#6b7280;">(mínimo 10 caracteres)</span>
+                </label>
+                <textarea id="motivoConsulta" name="motivoConsulta"
+                          class="textarea-ips"
+                          placeholder="Describa el motivo de la consulta del paciente..."
+                          minlength="10" maxlength="2000"></textarea>
+            </div>
+
             <!-- Botón -->
             <div class="col-span-1 md:col-span-2 mt-1">
                 <button type="submit"
                         class="btn-acceder btn-acceder-full"
-                        id="btnGuardar">
-                    Registrar paciente
+                        id="btnGuardar"
+                        onclick="return confirmarGuardado()">
+                    Finalizar Contacto y Registrar Paciente
                 </button>
             </div>
 
@@ -129,9 +192,38 @@
     </div>
 </div>
 
-<!-- AC-9: Deshabilitar botón tras envío -->
 <script>
-    document.getElementById('formPaciente').addEventListener('submit', function () {
+    // Filtrar municipios por departamento seleccionado
+    function filtrarMunicipios() {
+        const deptoSel = document.getElementById('deptoSelect');
+        const deptoId  = deptoSel.options[deptoSel.selectedIndex]?.getAttribute('data-id') || '';
+        const muniSel  = document.getElementById('muniSelect');
+        const opts     = muniSel.querySelectorAll('option[data-depto]');
+
+        muniSel.value = '';
+        opts.forEach(opt => {
+            opt.hidden = opt.getAttribute('data-depto') !== deptoId;
+        });
+        muniSel.querySelector('option:not([data-depto])').textContent =
+            deptoId ? '-- Seleccione municipio --' : '-- Seleccione departamento primero --';
+    }
+
+    // AC-8 HU-024: confirmación antes de enviar
+    function confirmarGuardado() {
+        const motivo = document.getElementById('motivoConsulta').value.trim();
+        if (motivo.length > 0 && motivo.length < 10) {
+            alert('El motivo de consulta debe tener al menos 10 caracteres.');
+            return false;
+        }
+        const msg = motivo.length >= 10
+            ? '¿Confirma el registro del paciente y su motivo de consulta?'
+            : '¿Confirma el registro del paciente?';
+        return confirm(msg);
+    }
+
+    // Deshabilitar botón tras envío
+    document.getElementById('formPaciente').addEventListener('submit', function(e) {
+        if (!confirmarGuardado()) { e.preventDefault(); return; }
         const btn = document.getElementById('btnGuardar');
         btn.disabled = true;
         btn.textContent = 'Registrando...';
