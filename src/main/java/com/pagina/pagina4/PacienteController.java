@@ -14,18 +14,21 @@ public class PacienteController {
 
     private static final Logger logger = LoggerFactory.getLogger(PacienteController.class);
     private final PacienteService pacienteService;
-    private final TipoDocumentoService tipoDocumentoService; // ✅ AC-1: inyectar servicio
+    private final TipoDocumentoService tipoDocumentoService;
+    private final EstadoCivilService estadoCivilService;
 
     public PacienteController(PacienteService pacienteService,
-                               TipoDocumentoService tipoDocumentoService) {
+                               TipoDocumentoService tipoDocumentoService,
+                               EstadoCivilService estadoCivilService) {
         this.pacienteService = pacienteService;
         this.tipoDocumentoService = tipoDocumentoService;
+        this.estadoCivilService = estadoCivilService;
     }
 
     @GetMapping("/registro")
     public String mostrarFormulario(@RequestParam(required = false) String exito, Model model) {
-        // ✅ AC-1 HU-003: tipos de documento cargados desde la BD (catálogo HU-011)
         model.addAttribute("tiposDocumento", tipoDocumentoService.listarActivos());
+        model.addAttribute("estadosCiviles", estadoCivilService.listarTodos());
         if (exito != null) model.addAttribute("exito", "Paciente registrado exitosamente.");
         return "HU01-03/registroPaciente";
     }
@@ -37,12 +40,14 @@ public class PacienteController {
             @RequestParam String nombres,
             @RequestParam String apellidos,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaNacimiento,
+            @RequestParam(required = false) String estadoCivil,
             Model model) {
 
         if (nombres.trim().isEmpty() || apellidos.trim().isEmpty() ||
             numeroDocumento.trim().isEmpty() || tipoDocumento.trim().isEmpty()) {
             model.addAttribute("error", "Todos los campos son obligatorios.");
             model.addAttribute("tiposDocumento", tipoDocumentoService.listarActivos());
+            model.addAttribute("estadosCiviles", estadoCivilService.listarTodos());
             return "HU01-03/registroPaciente";
         }
         try {
@@ -52,6 +57,7 @@ public class PacienteController {
             nuevo.setNombres(nombres.trim());
             nuevo.setApellidos(apellidos.trim());
             nuevo.setFechaNacimiento(fechaNacimiento);
+            nuevo.setEstadoCivil(estadoCivil);
             pacienteService.registrarPaciente(nuevo);
             logger.info("Paciente registrado: {} - {}", tipoDocumento, numeroDocumento);
             return "redirect:/pacientes/registro?exito=true";
@@ -59,6 +65,7 @@ public class PacienteController {
             logger.warn("Error al registrar paciente: {}", e.getMessage());
             model.addAttribute("error", e.getMessage());
             model.addAttribute("tiposDocumento", tipoDocumentoService.listarActivos());
+            model.addAttribute("estadosCiviles", estadoCivilService.listarTodos());
             return "HU01-03/registroPaciente";
         }
     }

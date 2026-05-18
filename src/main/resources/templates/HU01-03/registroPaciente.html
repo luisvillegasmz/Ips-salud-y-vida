@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html xmlns:th="http://www.thymeleaf.org" lang="es" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,8 +46,8 @@
                         class="select-ips" required>
                     <option value="" disabled selected>-- Seleccione --</option>
                     <option th:each="tipo : ${tiposDocumento}"
-                            th:value="${tipo}"
-                            th:text="${tipo}">
+                            th:value="${tipo.codigo}"
+                            th:text="${tipo.nombre}">
                     </option>
                 </select>
             </div>
@@ -96,6 +96,19 @@
                 <input type="date" class="input-login"
                        id="fechaNacimiento" name="fechaNacimiento"
                        required>
+            </div>
+
+            <!-- Estado civil -->
+            <div class="col-span-1 md:col-span-2">
+                <label for="estadoCivil" class="form-label-ips">Estado civil</label>
+                <select id="estadoCivil" name="estadoCivil" class="select-ips">
+                    <option value="" selected>-- Seleccione --</option>
+                    <option th:each="estado : ${estadosCiviles}"
+                            th:if="${estado.activo}"
+                            th:value="${estado.nombre}"
+                            th:text="${estado.nombre}">
+                    </option>
+                </select>
             </div>
 
             <!-- Botón -->

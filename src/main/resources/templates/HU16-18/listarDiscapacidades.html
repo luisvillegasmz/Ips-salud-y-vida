@@ -1,74 +1,98 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
-    <title>Discapacidades</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-        .form-container { max-width: 500px; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discapacidades | Salud y Vida IPS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="icon" th:href="@{/img/LogoSinLetras.png}" type="image/png">
 </head>
-<body class="container mt-4">
+<body>
 
-    <h2 class="mb-3">Gestión de Discapacidades</h2>
+<div class="login-wrapper" style="align-items: flex-start; padding-top: 2rem;">
+    <div class="card-login card-full">
 
-    <div th:if="${exito}" class="alert alert-success" th:text="${exito}"></div>
+        <div class="page-header">
+            <div class="page-header-left">
+                <img th:src="@{/img/Logo.png}" src="/img/Logo.png" alt="Logo Salud y Vida IPS">
+                <div>
+                    <p class="page-title">Discapacidades</p>
+                    <p class="page-meta">Catálogo de tipos de discapacidad del sistema</p>
+                </div>
+            </div>
+            <a href="/dashboard" class="btn-volver">← Volver al inicio</a>
+        </div>
 
-    <!-- Formulario -->
-    <div class="form-container mb-4 p-3 border rounded bg-light">
-        <form th:action="@{/discapacidades/guardar}" method="post">
-            <h5 th:text="${editar != null} ? 'Editar Discapacidad' : 'Nueva Discapacidad'">Formulario</h5>
+        <div th:if="${exito}" class="alert-exito" th:text="${exito}"></div>
+
+        <!-- Formulario -->
+        <form th:action="@{/discapacidades/guardar}" method="post"
+              class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
 
             <input type="hidden" name="id" th:value="${editar != null} ? ${editar.id} : ''">
 
-            <div class="mb-3">
-                <label class="form-label">Nombre</label>
-                <input type="text" name="nombre" class="form-control"
+            <div class="col-span-2">
+                <label class="form-label-ips">Nombre <span class="required">*</span></label>
+                <input type="text" name="nombre" class="input-login"
                        th:value="${editar != null} ? ${editar.nombre} : ''"
-                       placeholder="Ej: Visual, Auditiva, Motriz" required>
+                       placeholder="Ej: Visual, Auditiva, Motriz" required maxlength="100">
             </div>
 
-            <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-primary">
-                    <span th:text="${editar != null} ? 'Actualizar' : 'Guardar'">Guardar</span>
+            <div class="flex items-end gap-2">
+                <button type="submit" class="btn-acceder btn-acceder-full"
+                        th:text="${editar != null} ? 'Actualizar' : 'Guardar'">
+                    Guardar
                 </button>
-                <a th:if="${editar != null}" href="/discapacidades" class="btn btn-secondary">
+                <a th:if="${editar != null}" href="/discapacidades"
+                   class="btn-acceder btn-acceder-full"
+                   style="background-color:#6b7280; text-align:center;">
                     Cancelar
                 </a>
             </div>
         </form>
+
+        <!-- Tabla -->
+        <div style="overflow-x: auto;">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="dis : ${discapacidades}"
+                        th:class="${dis.activo} ? '' : 'table-secondary'">
+                        <td th:text="${dis.id}"></td>
+                        <td th:text="${dis.nombre}"></td>
+                        <td>
+                            <span th:if="${dis.activo}" class="badge-activo">Activo</span>
+                            <span th:unless="${dis.activo}" class="badge-inactivo">Inactivo</span>
+                        </td>
+                        <td class="td-acciones">
+                            <a th:href="@{/discapacidades/editar/{id}(id=${dis.id})}"
+                               class="btn-editar">Editar</a>
+                            <a th:href="@{/discapacidades/inactivar/{id}(id=${dis.id})}"
+                               class="btn-inactivar"
+                               onclick="return confirm('¿Inactivar esta discapacidad?')">
+                                Inactivar
+                            </a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(discapacidades)}">
+                        <td colspan="4" class="sin-registros">No hay discapacidades registradas.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
     </div>
+</div>
 
-    <!-- Tabla -->
-    <table class="table table-bordered">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="dis : ${discapacidades}">
-                <td th:text="${dis.id}"></td>
-                <td th:text="${dis.nombre}"></td>
-                <td>
-                    <span th:if="${dis.activo}" class="badge bg-success">Activo</span>
-                    <span th:unless="${dis.activo}" class="badge bg-secondary">Inactivo</span>
-                </td>
-                <td>
-                    <a th:href="@{/discapacidades/editar/{id}(id=${dis.id})}"
-                       class="btn btn-warning btn-sm">Editar</a>
-                    <a th:href="@{/discapacidades/inactivar/{id}(id=${dis.id})}"
-                       class="btn btn-danger btn-sm"
-                       onclick="return confirm('¿Inactivar esta discapacidad?')">
-                       Inactivar
-                    </a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
