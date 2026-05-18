@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Departamentos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-4">
+
+    <h2 class="mb-3">Gestión de Departamentos</h2>
+
+    <!-- Mensajes -->
+    <div th:if="${exito}" class="alert alert-success" th:text="${exito}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <!-- Formulario: detecta si es edición o creación -->
+    <form th:action="@{/departamentos/guardar}" method="post" class="mb-4 p-3 border rounded bg-light">
+        <h5 th:text="${editar != null} ? 'Editar Departamento' : 'Nuevo Departamento'">Formulario</h5>
+
+        <!-- ID oculto: solo se envía si estamos editando -->
+        <input type="hidden" name="id" th:value="${editar != null} ? ${editar.id} : ''">
+
+        <div class="row g-2">
+            <div class="col-md-3">
+                <label class="form-label">Código DANE</label>
+                <input type="text" name="codigoDane" class="form-control"
+                       th:value="${editar != null} ? ${editar.codigoDane} : ''"
+                       placeholder="Ej: 05" required>
+            </div>
+            <div class="col-md-5">
+                <label class="form-label">Nombre</label>
+                <input type="text" name="nombre" class="form-control"
+                       th:value="${editar != null} ? ${editar.nombre} : ''"
+                       placeholder="Ej: Antioquia" required>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">
+                    <span th:text="${editar != null} ? 'Actualizar' : 'Guardar'">Guardar</span>
+                </button>
+            </div>
+            <div class="col-md-2 d-flex align-items-end" th:if="${editar != null}">
+                <a href="/departamentos" class="btn btn-secondary w-100">Cancelar</a>
+            </div>
+        </div>
+    </form>
+
+    <!-- Tabla -->
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Código DANE</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="dep : ${departamentos}">
+                <td th:text="${dep.id}"></td>
+                <td th:text="${dep.codigoDane}"></td>
+                <td th:text="${dep.nombre}"></td>
+                <td>
+                    <span th:if="${dep.activo}" class="badge bg-success">Activo</span>
+                    <span th:unless="${dep.activo}" class="badge bg-secondary">Inactivo</span>
+                </td>
+                <td>
+                    <a th:href="@{/departamentos/editar/{id}(id=${dep.id})}"
+                       class="btn btn-warning btn-sm">Editar</a>
+                    <a th:href="@{/departamentos/inactivar/{id}(id=${dep.id})}"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('¿Seguro que deseas inactivar este departamento?')">
+                       Inactivar
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
