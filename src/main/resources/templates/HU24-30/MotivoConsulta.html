@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HU-024 Motivo de consulta | Salud y Vida IPS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="icon" th:href="@{/img/LogoSinLetras.png}" type="image/png">
+    <style>
+        /* ── Encabezado tipo mockup ─────────────────────────── */
+        .hu-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.75rem;
+        }
+        .hu-header-logo img {
+            height: 56px;
+            width: auto;
+        }
+        .hu-header-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1b3a5c;
+            margin: 0;
+            text-align: center;
+            flex: 1;
+        }
+        .hu-header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #1b3a5c;
+            background: #1b3a5c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            overflow: hidden;
+            text-decoration: none;
+        }
+        .icon-btn:hover { background: #142d47; transform: scale(1.07); }
+        .icon-btn img { width: 24px; height: 24px; object-fit: contain; filter: brightness(10); }
+
+        /* ── Sección síntomas ──────────────────────────────── */
+        .sintomas-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.25rem;
+        }
+        @media (max-width: 640px) { .sintomas-grid { grid-template-columns: 1fr 1fr; } }
+
+        .sintoma-item label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #374151;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .sintoma-select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            background: #f8fafc;
+            font-size: 0.88rem;
+            color: #374151;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231b3a5c' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 30px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .sintoma-select:focus {
+            outline: none;
+            border-color: #1b3a5c;
+            box-shadow: 0 0 0 2px rgba(27, 58, 92, 0.15);
+        }
+
+        /* ── Historial (opcional) ─────────────────────────── */
+        .historial-card {
+            background: #f0faf0;
+            border: 1px solid #bbf7d0;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.82rem;
+            color: #166534;
+            margin-bottom: 6px;
+        }
+        .historial-card strong { color: #1b3a5c; }
+    </style>
+</head>
+<body>
+
+<div class="login-wrapper" style="align-items: flex-start; padding-top: 2rem;">
+    <div class="card-login card-xl">
+
+        <!-- ── Encabezado ────────────────────────────────────────── -->
+        <div class="hu-header">
+            <div class="hu-header-logo">
+                <img th:src="@{/img/LogoSinLetras.png}" src="/img/LogoSinLetras.png" alt="Logo IPS">
+            </div>
+            <h1 class="hu-header-title">Motivo de consulta</h1>
+            <div class="hu-header-actions">
+                <a href="/dashboard" class="icon-btn" title="Perfil de usuario">
+                    <img th:src="@{/img/usuario.png}" src="/img/usuario.png" alt="Usuario">
+                </a>
+                <a href="/logout" class="icon-btn" title="Cerrar sesión">
+                    <img th:src="@{/img/logo_salir.png}" src="/img/logo_salir.png" alt="Salir">
+                </a>
+            </div>
+        </div>
+
+        <!-- ── Datos del paciente ─────────────────────────────────── -->
+        <div class="dashboard-welcome" style="margin-bottom: 1.25rem;">
+            <p class="dashboard-welcome-name">
+                <span th:text="${paciente.nombres}"></span>
+                <span th:text="${paciente.apellidos}"></span>
+            </p>
+            <p class="dashboard-welcome-sub">
+                Doc: <span th:text="${paciente.tipoDocumento}"></span>
+                &nbsp;·&nbsp;
+                <span th:text="${paciente.numeroDocumento}"></span>
+            </p>
+        </div>
+
+        <!-- ── Alertas ────────────────────────────────────────────── -->
+        <div th:if="${exito}" class="alert-exito" role="alert" th:text="${exito}"></div>
+        <div th:if="${error}"  class="alert-error"  role="alert" th:text="${error}"></div>
+
+        <!-- ── Formulario ─────────────────────────────────────────── -->
+        <form th:action="@{/consulta/motivo/{id}(id=${paciente.id})}" method="post" id="formMotivo">
+
+            <!-- Descripción de síntomas -->
+            <div style="margin-bottom: 1rem;">
+                <label for="descripcionSintomas" class="form-label-ips">
+                    Descripción de los síntomas <span class="required">*</span>
+                </label>
+                <textarea id="descripcionSintomas"
+                          name="descripcionSintomas"
+                          class="input-login"
+                          rows="3"
+                          placeholder="Texto"
+                          required
+                          style="resize: vertical; min-height: 80px;"></textarea>
+            </div>
+
+            <!-- Síntomas con severidad -->
+            <div class="sintomas-grid">
+                <!-- Fiebre -->
+                <div class="sintoma-item">
+                    <label for="fiebre">Fiebre</label>
+                    <select id="fiebre" name="fiebre" class="sintoma-select">
+                        <option value="">Selecciona</option>
+                        <option th:each="s : ${severidades}" th:value="${s}" th:text="${s}"></option>
+                    </select>
+                </div>
+                <!-- Tos -->
+                <div class="sintoma-item">
+                    <label for="tos">Tos</label>
+                    <select id="tos" name="tos" class="sintoma-select">
+                        <option value="">Selecciona</option>
+                        <option th:each="s : ${severidades}" th:value="${s}" th:text="${s}"></option>
+                    </select>
+                </div>
+                <!-- Dolor abdominal -->
+                <div class="sintoma-item">
+                    <label for="dolorAbdominal">Dolor abdominal</label>
+                    <select id="dolorAbdominal" name="dolorAbdominal" class="sintoma-select">
+                        <option value="">Selecciona</option>
+                        <option th:each="s : ${severidades}" th:value="${s}" th:text="${s}"></option>
+                    </select>
+                </div>
+                <!-- Náuseas -->
+                <div class="sintoma-item">
+                    <label for="nauseas">Náuseas</label>
+                    <select id="nauseas" name="nauseas" class="sintoma-select">
+                        <option value="">Selecciona</option>
+                        <option th:each="s : ${severidades}" th:value="${s}" th:text="${s}"></option>
+                    </select>
+                </div>
+                <!-- Mareo -->
+                <div class="sintoma-item">
+                    <label for="mareo">Mareo</label>
+                    <select id="mareo" name="mareo" class="sintoma-select">
+                        <option value="">Selecciona</option>
+                        <option th:each="s : ${severidades}" th:value="${s}" th:text="${s}"></option>
+                    </select>
+                </div>
+                <!-- Fatiga -->
+                <div class="sintoma-item">
+                    <label for="fatiga">Fatiga</label>
+                    <select id="fatiga" name="fatiga" class="sintoma-select">
+                        <option value="">Selecciona</option>
+                        <option th:each="s : ${severidades}" th:value="${s}" th:text="${s}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Botones de acción -->
+            <div style="display:flex; gap:10px; margin-top:1.5rem; justify-content: flex-end;">
+                <a th:href="@{/pacientes/buscar}" class="btn-volver" style="margin-top:0; align-self:center;">
+                    ← Volver
+                </a>
+                <button type="submit" class="btn-acceder" id="btnGuardar">
+                    Registrar consulta
+                </button>
+            </div>
+        </form>
+
+        <!-- ── Historial de consultas ──────────────────────────────── -->
+        <div th:if="${historial != null and !#lists.isEmpty(historial)}"
+             style="margin-top: 2rem; border-top: 1px solid #e5e7eb; padding-top: 1.25rem;">
+            <p class="form-label-ips" style="margin-bottom: .75rem; font-size: 0.85rem;">
+                Consultas anteriores
+            </p>
+            <div th:each="m : ${historial}" class="historial-card">
+                <strong th:text="${#temporals.format(m.fechaRegistro, 'dd/MM/yyyy HH:mm')}"></strong>
+                &nbsp;—&nbsp;
+                <span th:text="${m.descripcionSintomas}"></span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    document.getElementById('formMotivo').addEventListener('submit', function () {
+        const btn = document.getElementById('btnGuardar');
+        btn.disabled = true;
+        btn.textContent = 'Guardando...';
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
