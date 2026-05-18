@@ -1,8 +1,7 @@
 package com.pagina.pagina4;
 
-import com.ips.saludyvida.model.TipoDocumento;
-import com.ips.saludyvida.service.TipoDocumentoService;
-
+import com.pagina.pagina4.TipoDocumento;
+import com.pagina.pagina4.TipoDocumentoService;
 import jakarta.validation.Valid;
 
 import org.slf4j.Logger;

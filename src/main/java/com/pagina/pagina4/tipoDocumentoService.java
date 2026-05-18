@@ -1,7 +1,7 @@
 package com.pagina.pagina4;
 
-import com.ips.saludyvida.model.TipoDocumento;
-import com.ips.saludyvida.repository.TipoDocumentoRepository;
+import com.pagina.pagina4.TipoDocumento;
+import com.pagina.pagina4.TipoDocumentoRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
