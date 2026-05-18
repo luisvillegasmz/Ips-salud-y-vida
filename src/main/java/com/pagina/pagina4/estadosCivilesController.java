@@ -13,10 +13,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/catalogos/estado-civil")
-public class EstadoCivilController {
+public class estadoCivilController {
 
     @Autowired
-    private EstadoCivilService service;
+    private estadoCivilService service;
 
     @GetMapping
     public String listar(Model model) {
@@ -28,7 +28,7 @@ public class EstadoCivilController {
 
         model.addAttribute(
                 "estadoCivil",
-                new EstadoCivil()
+                new estadoCivil()
         );
 
         return "estadoCivil/lista";
@@ -40,7 +40,7 @@ public class EstadoCivilController {
             Model model
     ) {
 
-        EstadoCivil estadoCivil =
+        estadoCivil estadoCivil =
                 service.buscarPorId(id).orElseThrow();
 
         model.addAttribute(
@@ -61,7 +61,7 @@ public class EstadoCivilController {
 
             @Valid
             @ModelAttribute("estadoCivil")
-            EstadoCivil estadoCivil,
+            estadoCivil estadoCivil,
 
             BindingResult result,
             Model model,
