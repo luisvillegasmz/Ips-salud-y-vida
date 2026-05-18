@@ -1,6 +1,5 @@
 package com.pagina.pagina4;
 
-package com.ips.saludyvida.repository;
 import com.ips.saludyvida.model.TipoDocumento;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
