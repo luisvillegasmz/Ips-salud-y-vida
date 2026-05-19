@@ -1,36 +1,42 @@
 package com.pagina.pagina4;
 
 import org.springframework.stereotype.Service;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ContactoClinicoService {
 
-    private final ContactoClinicoRepository repo;
+    private final MotivoConsultaRepository motivoRepo;
+    private final PacienteRepository pacienteRepo;
 
-    public ContactoClinicoService(ContactoClinicoRepository repo) {
-        this.repo = repo;
+    public ContactoClinicoService(MotivoConsultaRepository motivoRepo,
+                                  PacienteRepository pacienteRepo) {
+        this.motivoRepo  = motivoRepo;
+        this.pacienteRepo = pacienteRepo;
     }
 
-    // AC-2: fecha/hora automática — AC-3: vinculado al pacienteId — AC-4: médico desde sesión
-    public void registrar(Long pacienteId, String descripcion, String nombreMedico, String codigoCIE10) {
-        ContactoClinico c = new ContactoClinico();
-        c.setPacienteId(pacienteId);
-        c.setDescripcion(descripcion.trim());
-        c.setFechaHora(LocalDateTime.now());
-        c.setNombreMedico(nombreMedico);
-        c.setCodigoCIE10(codigoCIE10 != null && !codigoCIE10.isBlank() ? codigoCIE10.trim() : null);
-        repo.save(c);
+    // Guarda el motivo de consulta rápido desde el formulario de registro de paciente
+    public void registrar(Long pacienteId, String descripcion,
+                          String nombreMedico, String codigoCIE10) {
+        Paciente paciente = pacienteRepo.findById(pacienteId)
+                .orElseThrow(() -> new RuntimeException("Paciente no encontrado."));
+        MotivoConsulta m = new MotivoConsulta();
+        m.setPaciente(paciente);
+        m.setDescripcionSintomas(descripcion.trim());
+        m.setNombreMedico(nombreMedico != null ? nombreMedico : "Sistema");
+        m.setCodigoCIE10(codigoCIE10 != null && !codigoCIE10.isBlank()
+                ? codigoCIE10.trim() : null);
+        motivoRepo.save(m);
     }
 
-    public Optional<ContactoClinico> ultimoPorPaciente(Long pacienteId) {
-        List<ContactoClinico> lista = repo.findByPacienteIdOrderByFechaHoraDesc(pacienteId);
+    public Optional<MotivoConsulta> ultimoPorPaciente(Long pacienteId) {
+        List<MotivoConsulta> lista =
+                motivoRepo.findByPacienteIdOrderByFechaRegistroDesc(pacienteId);
         return lista.isEmpty() ? Optional.empty() : Optional.of(lista.get(0));
     }
 
-    public List<ContactoClinico> porPaciente(Long pacienteId) {
-        return repo.findByPacienteIdOrderByFechaHoraDesc(pacienteId);
+    public List<MotivoConsulta> porPaciente(Long pacienteId) {
+        return motivoRepo.findByPacienteIdOrderByFechaRegistroDesc(pacienteId);
     }
 }

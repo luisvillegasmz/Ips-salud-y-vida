@@ -102,7 +102,6 @@ public class PacienteController {
             Paciente guardado = pacienteService.registrarPaciente(nuevo);
             logger.info("Paciente registrado: {} - {}", tipoDocumento, numeroDocumento);
 
-            // AC-1 HU-024: guardar motivo de consulta si fue ingresado (mínimo 10 caracteres)
             if (motivoConsulta != null && motivoConsulta.trim().length() >= 10) {
                 Usuario medico = (Usuario) session.getAttribute("usuarioActivo");
                 String nombreMedico = medico != null

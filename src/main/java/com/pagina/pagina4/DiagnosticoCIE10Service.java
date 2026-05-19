@@ -34,7 +34,6 @@ public class DiagnosticoCIE10Service {
         String codigo = d.getCodigo().trim().toUpperCase();
         d.setCodigo(codigo);
 
-        // ✅ AC-5 HU-026: validar formato CIE-10 (Letra + Números, ej: J00, E11, I10.5)
         if (!PATRON_CIE10.matcher(codigo).matches()) {
             throw new RuntimeException(
                 "Código CIE-10 inválido: '" + codigo + "'. " +
@@ -46,7 +45,6 @@ public class DiagnosticoCIE10Service {
             throw new RuntimeException("Ya existe un diagnóstico con el código " + codigo);
         }
 
-        // Al editar: verificar que el código no choque con otro registro
         if (d.getId() != null) {
             repo.findByCodigo(codigo).ifPresent(existente -> {
                 if (!existente.getId().equals(d.getId())) {

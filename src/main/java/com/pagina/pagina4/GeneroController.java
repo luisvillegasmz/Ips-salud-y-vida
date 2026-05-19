@@ -53,7 +53,6 @@ public class GeneroController {
         return "redirect:/catalogos/genero";
     }
 
-    // ✅ AC-7 y AC-9 HU-012: endpoint REST JSON para módulo de pacientes y Postman
     @GetMapping("/api")
     @ResponseBody
     public ResponseEntity<List<Genero>> apiListar() {

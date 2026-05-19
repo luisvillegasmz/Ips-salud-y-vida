@@ -12,17 +12,13 @@ public class PacienteService {
         this.pacienteRepository = pacienteRepository;
     }
 
-    // AC-3 + AC-6: Validaciones y registro
     public Paciente registrarPaciente(Paciente paciente) {
 
-        
-        // AC-3: Número de documento no vacío
         if (paciente.getNumeroDocumento() == null ||
             paciente.getNumeroDocumento().trim().isEmpty()) {
             throw new RuntimeException("El número de documento no puede estar vacío.");
         }
 
-        // AC-3: No negativo (para documentos numéricos)
         if (paciente.getNumeroDocumento().matches("\\d+")) {
             long numero = Long.parseLong(paciente.getNumeroDocumento());
             if (numero <= 0) {
@@ -30,7 +26,6 @@ public class PacienteService {
             }
         }
 
-        // AC-6: Verificar que no esté ya registrado
         if (pacienteRepository.existsByNumeroDocumento(paciente.getNumeroDocumento())) {
             throw new RuntimeException("Ya existe un paciente registrado con ese número de documento.");
         }

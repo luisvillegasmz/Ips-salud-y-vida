@@ -47,7 +47,7 @@ public class UsuarioController {
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("usuario", usuarioService.obtenerPorId(id));
-            return "HU01-03/editarUsuario"; // ✅ CORREGIDO
+            return "HU01-03/editarUsuario";
         }
     }
 

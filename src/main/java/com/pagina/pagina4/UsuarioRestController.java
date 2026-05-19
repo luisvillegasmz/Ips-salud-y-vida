@@ -14,7 +14,6 @@ public class UsuarioRestController {
         this.usuarioService = usuarioService;
     }
 
-    // AC-9: Crear usuario desde Postman con JSON
     @PostMapping
     public ResponseEntity<?> crearUsuario(@RequestBody Usuario usuario) {
         try {
@@ -25,13 +24,11 @@ public class UsuarioRestController {
         }
     }
 
-    // Listar desde Postman
     @GetMapping
     public ResponseEntity<List<Usuario>> listar() {
         return ResponseEntity.ok(usuarioService.obtenerTodosLosUsuarios());
     }
 
-    // Inactivar desde Postman
     @PatchMapping("/inactivar/{id}")
     public ResponseEntity<String> inactivar(@PathVariable Long id) {
         usuarioService.inactivarUsuario(id);

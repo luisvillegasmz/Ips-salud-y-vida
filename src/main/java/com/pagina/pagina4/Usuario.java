@@ -23,7 +23,7 @@ public class Usuario {
     private String apellido;
 
     @Column(unique = true, nullable = false)
-    private String username; // AC-1: campo username separado del email
+    private String username;
 
     @Column(unique = true, nullable = false)
     private String email;
@@ -37,5 +37,5 @@ public class Usuario {
     private String password;
 
     @Column(nullable = false)
-    private Boolean activo = true; // AC-4: estado del usuario
+    private Boolean activo = true;
 }

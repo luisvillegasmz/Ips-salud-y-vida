@@ -16,7 +16,7 @@ public class MotivoConsultaService {
     }
 
     public MotivoConsulta registrar(Long pacienteId, String descripcion,
-                                    String nombreMedico,
+                                    String nombreMedico, String codigoCIE10,
                                     String fiebre, String tos,
                                     String dolorAbdominal, String nauseas,
                                     String mareo, String fatiga) {
@@ -24,7 +24,6 @@ public class MotivoConsultaService {
         if (descripcion == null || descripcion.trim().isEmpty()) {
             throw new RuntimeException("La descripción de síntomas es obligatoria.");
         }
-        // ✅ AC-5 HU-024: longitud mínima
         if (descripcion.trim().length() < 10) {
             throw new RuntimeException("La descripción debe tener al menos 10 caracteres.");
         }
@@ -35,7 +34,8 @@ public class MotivoConsultaService {
         MotivoConsulta m = new MotivoConsulta();
         m.setPaciente(paciente);
         m.setDescripcionSintomas(descripcion.trim());
-        m.setNombreMedico(nombreMedico != null ? nombreMedico : "Sin asignar"); // ✅ AC-4
+        m.setNombreMedico(nombreMedico != null ? nombreMedico : "Sin asignar");
+        m.setCodigoCIE10(codigoCIE10 != null && !codigoCIE10.isBlank() ? codigoCIE10.trim() : null);
         m.setFiebre(nvl(fiebre));
         m.setTos(nvl(tos));
         m.setDolorAbdominal(nvl(dolorAbdominal));

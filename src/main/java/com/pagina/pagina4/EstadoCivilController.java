@@ -21,14 +21,14 @@ public class EstadoCivilController {
     public String listar(Model model) {
         model.addAttribute("estados", service.listarTodos());
         model.addAttribute("estadoCivil", new EstadoCivil());
-        return "HU11-13/estadosCiviles"; // ✅ Ruta corregida
+        return "HU11-13/estadosCiviles";
     }
 
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Integer id, Model model) {
         model.addAttribute("estados", service.listarTodos());
         model.addAttribute("estadoCivil", service.buscarPorId(id).orElseThrow());
-        return "HU11-13/estadosCiviles"; // ✅ Ruta corregida
+        return "HU11-13/estadosCiviles";
     }
 
     @PostMapping("/guardar")
@@ -53,7 +53,6 @@ public class EstadoCivilController {
         return "redirect:/catalogos/estado-civil";
     }
 
-    // ✅ AC-9 HU-013: endpoint REST para Postman
     @GetMapping("/api")
     @ResponseBody
     public ResponseEntity<List<EstadoCivil>> apiListar() {

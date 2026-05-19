@@ -1,6 +1,3 @@
-/* ══════════════════════════════════════
-   BASE
-══════════════════════════════════════ */
 body {
     margin: 0;
     min-height: 100vh;
@@ -18,9 +15,6 @@ body {
     width: 100%;
 }
 
-/* ══════════════════════════════════════
-   TARJETAS
-══════════════════════════════════════ */
 .card-login {
     background: #ffffff;
     border-radius: 20px;
@@ -34,9 +28,6 @@ body {
 .card-full  { max-width: 1000px; }
 .card-xl    { max-width: 1100px; }
 
-/* ══════════════════════════════════════
-   LOGO
-══════════════════════════════════════ */
 .logo-area {
     display: flex;
     justify-content: center;
@@ -46,9 +37,6 @@ body {
 .logo-area img  { height: 60px; width: auto; }
 .logo-sm img    { height: 44px; width: auto; }
 
-/* ══════════════════════════════════════
-   TÍTULOS
-══════════════════════════════════════ */
 .login-title {
     text-align: center;
     color: #3a3a3a;
@@ -65,9 +53,6 @@ body {
     margin-top: -1rem;
 }
 
-/* ══════════════════════════════════════
-   INPUTS
-══════════════════════════════════════ */
 .input-login {
     background-color: #f1f4f8;
     border: none;
@@ -87,7 +72,6 @@ body {
 
 .input-login::placeholder { color: #9aa5b0; }
 
-/* Select compartido */
 .select-ips {
     background-color: #f1f4f8;
     border: none;
@@ -107,7 +91,6 @@ body {
     background-color: #e8eef4;
 }
 
-/* Input con prefijo @ */
 .input-prefix-wrapper {
     display: flex;
     align-items: center;
@@ -135,9 +118,6 @@ body {
 
 .input-prefix-wrapper input::placeholder { color: #9aa5b0; }
 
-/* ══════════════════════════════════════
-   LABELS
-══════════════════════════════════════ */
 .form-label-ips {
     font-size: 0.8rem;
     font-weight: 600;
@@ -148,9 +128,6 @@ body {
 
 .form-label-ips .required { color: #e53e3e; }
 
-/* ══════════════════════════════════════
-   BOTONES
-══════════════════════════════════════ */
 .btn-acceder {
     background-color: #1b3a5c;
     color: #ffffff;
@@ -237,9 +214,6 @@ body {
     color: #7f1d1d;
 }
 
-/* ══════════════════════════════════════
-   ALERTAS
-══════════════════════════════════════ */
 .alert-exito {
     background-color: #f0fdf4;
     border: 1px solid #bbf7d0;
@@ -260,9 +234,6 @@ body {
     margin-bottom: 1rem;
 }
 
-/* ══════════════════════════════════════
-   LINKS
-══════════════════════════════════════ */
 .link-olvido {
     font-size: 0.82rem;
     color: #1b3a5c;
@@ -271,9 +242,6 @@ body {
 
 .link-olvido:hover { text-decoration: underline; }
 
-/* ══════════════════════════════════════
-   ENCABEZADO DE PÁGINA (listados)
-══════════════════════════════════════ */
 .page-header {
     display: flex;
     align-items: center;
@@ -304,9 +272,6 @@ body {
     margin: 0;
 }
 
-/* ══════════════════════════════════════
-   TABLA
-══════════════════════════════════════ */
 .tabla-ips {
     width: 100%;
     border-collapse: separate;
@@ -345,9 +310,6 @@ body {
 
 .td-acciones { display: flex; gap: 6px; align-items: center; }
 
-/* ══════════════════════════════════════
-   BADGES
-══════════════════════════════════════ */
 .badge-activo {
     background-color: #d1fae5;
     color: #065f46;
@@ -366,9 +328,6 @@ body {
     font-weight: 600;
 }
 
-/* ══════════════════════════════════════
-   BOTONES DE TABLA
-══════════════════════════════════════ */
 .btn-editar {
     background-color: #fef3c7;
     color: #92400e;
@@ -405,9 +364,6 @@ body {
     font-size: 0.9rem;
 }
 
-/* ══════════════════════════════════════
-   DASHBOARD
-══════════════════════════════════════ */
 .dashboard-header {
     display: flex;
     align-items: center;
@@ -505,9 +461,6 @@ body {
     margin: 0;
 }
 
-/* ══════════════════════════════════════
-   FORMULARIO GRID (registro paciente)
-══════════════════════════════════════ */
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -516,9 +469,6 @@ body {
 
 .form-grid-full { grid-column: 1 / -1; }
 
-/* ══════════════════════════════════════
-   TEXTAREA
-══════════════════════════════════════ */
 .textarea-ips {
     background-color: #f1f4f8;
     border: none;
@@ -541,9 +491,6 @@ body {
 
 .textarea-ips::placeholder { color: #9aa5b0; }
 
-/* ══════════════════════════════════════
-   BÚSQUEDA DE PACIENTES
-══════════════════════════════════════ */
 .hu-header {
     display: flex;
     align-items: center;
@@ -567,7 +514,6 @@ body {
     background: #1b3a5c;
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
-    transition: background 0.2s, transform 0.15s;
     overflow: hidden;
     text-decoration: none;
 }
@@ -649,9 +595,77 @@ body {
 }
 .th-sortable:hover { background-color: #162e4a; }
 
-/* ══════════════════════════════════════
-   RESPONSIVO
-══════════════════════════════════════ */
+.sintomas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1.25rem;
+}
+.sintoma-item label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #374151;
+    display: block;
+    margin-bottom: 4px;
+}
+.sintoma-select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 8px;
+    background: #f8fafc;
+    font-size: 0.88rem;
+    color: #374151;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231b3a5c' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.sintoma-select:focus {
+    outline: none;
+    border-color: #1b3a5c;
+    box-shadow: 0 0 0 2px rgba(27, 58, 92, 0.15);
+}
+
+.historial-card {
+    background: #f0faf0;
+    border: 1px solid #bbf7d0;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    color: #166534;
+    margin-bottom: 6px;
+}
+.historial-card strong { color: #1b3a5c; }
+.historial-cie {
+    display: inline-block;
+    background: #dbeafe;
+    color: #1e40af;
+    border-radius: 6px;
+    padding: 1px 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-left: 6px;
+}
+
+.cie10-modal-item {
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    color: #374151;
+}
+.cie10-modal-item:hover { background: #f1f5f9; }
+.cie10-modal-item .cie10-code {
+    font-weight: 700;
+    color: #1b3a5c;
+    margin-right: 8px;
+}
+#listaCIE10 { max-height: 320px; overflow-y: auto; }
+
 @media (max-width: 640px) {
     .card-login,
     .card-wide,

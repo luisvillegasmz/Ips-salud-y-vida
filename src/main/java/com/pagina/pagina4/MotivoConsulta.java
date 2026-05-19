@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter @Setter @NoArgsConstructor
 @Entity
-@Table(name = "contactos_clinicos") // ✅ AC-7 HU-024: nombre correcto
+@Table(name = "contactos_clinicos")
 public class MotivoConsulta {
 
     @Id
@@ -19,7 +19,6 @@ public class MotivoConsulta {
     @JoinColumn(name = "paciente_id", nullable = false)
     private Paciente paciente;
 
-    // ✅ AC-4 HU-024: médico que atiende
     @Column(nullable = false)
     private String nombreMedico;
 
@@ -33,7 +32,9 @@ public class MotivoConsulta {
     private String mareo;
     private String fatiga;
 
-    // ✅ AC-2 HU-024: fecha capturada automáticamente en Java
+    @Column(name = "codigocie10")
+    private String codigoCIE10;
+
     @Column(nullable = false)
     private LocalDateTime fechaRegistro = LocalDateTime.now();
 }

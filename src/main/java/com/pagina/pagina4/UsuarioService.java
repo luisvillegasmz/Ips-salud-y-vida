@@ -16,7 +16,6 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    // AC-1 + AC-5: Registro con validación de email y username únicos
     public Usuario registrarUsuario(Usuario usuario) {
     logger.info("Intentando registrar usuario: {}", usuario.getEmail());
 
@@ -35,18 +34,15 @@ public class UsuarioService {
     return guardado;
 }
 
-    // AC-2: Listar todos los usuarios
     public List<Usuario> obtenerTodosLosUsuarios() {
         return usuarioRepository.findAll();
     }
 
-    // AC-3: Obtener usuario por ID para edición
     public Usuario obtenerPorId(Long id) {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado."));
     }
 
-    // AC-3: Actualizar datos básicos
     public Usuario actualizarUsuario(Long id, Usuario datosNuevos) {
         Usuario existente = obtenerPorId(id);
         existente.setNombre(datosNuevos.getNombre());
@@ -56,14 +52,12 @@ public class UsuarioService {
         return usuarioRepository.save(existente);
     }
 
-    // AC-4: Inactivar usuario (sin borrado físico)
     public void inactivarUsuario(Long id) {
         Usuario usuario = obtenerPorId(id);
         usuario.setActivo(false);
         usuarioRepository.save(usuario);
     }
 
-    // Autenticación (solo usuarios activos)
     public Usuario autenticarUsuario(String email, String password) {
         return usuarioRepository.findByEmail(email)
                 .filter(u -> u.getPassword().equals(password))

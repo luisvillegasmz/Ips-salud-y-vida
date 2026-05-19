@@ -13,7 +13,6 @@ public interface DiagnosticoCIE10Repository extends JpaRepository<DiagnosticoCIE
 
     Optional<DiagnosticoCIE10> findByCodigo(String codigo);
 
-    /** Búsqueda por código o diagnóstico (case-insensitive) */
     @Query("SELECT d FROM DiagnosticoCIE10 d " +
            "WHERE LOWER(d.codigo) LIKE LOWER(CONCAT('%', :q, '%')) " +
            "   OR LOWER(d.diagnostico) LIKE LOWER(CONCAT('%', :q, '%'))")

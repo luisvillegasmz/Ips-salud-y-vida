@@ -67,7 +67,6 @@ public class TipoDocumentoController {
         return "redirect:/catalogos/tipo-documento";
     }
 
-    // ✅ AC-9 HU-011: API para Postman (GET y POST)
     @GetMapping("/api")
     @ResponseBody
     public ResponseEntity<List<TipoDocumento>> apiListar() {

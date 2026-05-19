@@ -24,7 +24,6 @@ public class DiagnosticoCIE10Controller {
         this.service = service;
     }
 
-    /* ── LISTADO + BÚSQUEDA ─────────────────────────────────────────── */
     @GetMapping
     public String listar(
             @RequestParam(required = false) String q,
@@ -36,17 +35,16 @@ public class DiagnosticoCIE10Controller {
         model.addAttribute("diagnosticos", service.buscar(q));
         model.addAttribute("q", q);
         if (exito != null) model.addAttribute("exito", exito);
-        return "HU24-30/Catalogocie10"; // ✅ Ruta corregida
+        return "HU24-30/Catalogocie10";
     }
 
-    /* ── FORMULARIO AÑADIR ──────────────────────────────────────────── */
     @GetMapping("/nuevo")
     public String formNuevo(Model model, HttpSession session) {
         if (session.getAttribute("usuarioActivo") == null) return "redirect:/inicioSesion";
         model.addAttribute("diagnostico", new DiagnosticoCIE10());
         model.addAttribute("categorias", CATEGORIAS);
         model.addAttribute("modoEdicion", false);
-        return "HU24-30/FormCie10"; // ✅ Ruta corregida
+        return "HU24-30/FormCie10"; 
     }
 
     @PostMapping("/nuevo")
@@ -75,18 +73,17 @@ public class DiagnosticoCIE10Controller {
             d.setDiagnostico(diagnostico);
             d.setCategoria(categoria);
             model.addAttribute("diagnostico", d);
-            return "HU24-30/FormCie10"; // ✅ Ruta corregida
+            return "HU24-30/FormCie10";
         }
     }
 
-    /* ── FORMULARIO EDITAR ──────────────────────────────────────────── */
     @GetMapping("/editar/{id}")
     public String formEditar(@PathVariable Long id, Model model, HttpSession session) {
         if (session.getAttribute("usuarioActivo") == null) return "redirect:/inicioSesion";
         model.addAttribute("diagnostico", service.obtenerPorId(id));
         model.addAttribute("categorias", CATEGORIAS);
         model.addAttribute("modoEdicion", true);
-        return "HU24-30/FormCie10"; // ✅ Ruta corregida
+        return "HU24-30/FormCie10";
     }
 
     @PostMapping("/editar/{id}")
@@ -116,11 +113,10 @@ public class DiagnosticoCIE10Controller {
             d.setDiagnostico(diagnostico);
             d.setCategoria(categoria);
             model.addAttribute("diagnostico", d);
-            return "HU24-30/FormCie10"; // ✅ Ruta corregida
+            return "HU24-30/FormCie10";
         }
     }
 
-    /* ── ELIMINAR ───────────────────────────────────────────────────── */
     @PostMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Long id, HttpSession session) {
         if (session.getAttribute("usuarioActivo") == null) return "redirect:/inicioSesion";
@@ -129,7 +125,6 @@ public class DiagnosticoCIE10Controller {
         return "redirect:/cie10?exito=Diagnóstico+eliminado";
     }
 
-    /* ── CAMBIAR ESTADO (activar / inactivar) ───────────────────────── */
     @PostMapping("/estado/{id}")
     public String cambiarEstado(@PathVariable Long id, HttpSession session) {
         if (session.getAttribute("usuarioActivo") == null) return "redirect:/inicioSesion";

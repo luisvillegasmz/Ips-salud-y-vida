@@ -63,7 +63,7 @@ public class BusquedaPacienteController {
         Map<Long, String> ultimosMotivos = new HashMap<>();
         for (Paciente p : resultados) {
             contactoService.ultimoPorPaciente(p.getId())
-                    .ifPresent(c -> ultimosMotivos.put(p.getId(), c.getDescripcion()));
+                    .ifPresent(m -> ultimosMotivos.put(p.getId(), m.getDescripcionSintomas()));
         }
 
         model.addAttribute("resultados",     resultados);

@@ -2,6 +2,7 @@ package com.pagina.pagina4;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import java.util.List;
 
 @Controller
 @RequestMapping("/discapacidades")
@@ -52,5 +55,11 @@ public class DiscapacidadController {
     public String inactivar(@PathVariable Long id) {
         discapacidadService.inactivar(id);
         return "redirect:/discapacidades?exito=true";
+    }
+
+    @GetMapping("/api")
+    @ResponseBody
+    public ResponseEntity<List<Discapacidad>> apiListar() {
+        return ResponseEntity.ok(discapacidadService.listarTodas());
     }
 }

@@ -8,112 +8,20 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link rel="icon" th:href="@{/img/LogoSinLetras.png}" type="image/png">
-    <style>
-        /* ── Encabezado tipo mockup ─────────────────────────── */
-        .hu-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.75rem;
-        }
-        .hu-header-logo img {
-            height: 56px;
-            width: auto;
-        }
-        .hu-header-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #1b3a5c;
-            margin: 0;
-            text-align: center;
-            flex: 1;
-        }
-        .hu-header-actions {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        .icon-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid #1b3a5c;
-            background: #1b3a5c;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.15s;
-            overflow: hidden;
-            text-decoration: none;
-        }
-        .icon-btn:hover { background: #142d47; transform: scale(1.07); }
-        .icon-btn img { width: 24px; height: 24px; object-fit: contain; filter: brightness(10); }
-
-        /* ── Sección síntomas ──────────────────────────────── */
-        .sintomas-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-top: 1.25rem;
-        }
-        @media (max-width: 640px) { .sintomas-grid { grid-template-columns: 1fr 1fr; } }
-
-        .sintoma-item label {
-            font-size: 0.78rem;
-            font-weight: 600;
-            color: #374151;
-            display: block;
-            margin-bottom: 4px;
-        }
-        .sintoma-select {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1.5px solid #cbd5e1;
-            border-radius: 8px;
-            background: #f8fafc;
-            font-size: 0.88rem;
-            color: #374151;
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231b3a5c' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            padding-right: 30px;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .sintoma-select:focus {
-            outline: none;
-            border-color: #1b3a5c;
-            box-shadow: 0 0 0 2px rgba(27, 58, 92, 0.15);
-        }
-
-        /* ── Historial (opcional) ─────────────────────────── */
-        .historial-card {
-            background: #f0faf0;
-            border: 1px solid #bbf7d0;
-            border-radius: 10px;
-            padding: 10px 14px;
-            font-size: 0.82rem;
-            color: #166534;
-            margin-bottom: 6px;
-        }
-        .historial-card strong { color: #1b3a5c; }
-    </style>
 </head>
 <body>
 
 <div class="login-wrapper" style="align-items: flex-start; padding-top: 2rem;">
     <div class="card-login card-xl">
 
-        <!-- ── Encabezado ────────────────────────────────────────── -->
+        <!-- Encabezado -->
         <div class="hu-header">
             <div class="hu-header-logo">
                 <img th:src="@{/img/LogoSinLetras.png}" src="/img/LogoSinLetras.png" alt="Logo IPS">
             </div>
             <h1 class="hu-header-title">Motivo de consulta</h1>
             <div class="hu-header-actions">
-                <a href="/dashboard" class="icon-btn" title="Perfil de usuario">
+                <a href="/dashboard" class="icon-btn" title="Inicio">
                     <img th:src="@{/img/usuario.png}" src="/img/usuario.png" alt="Usuario">
                 </a>
                 <a href="/logout" class="icon-btn" title="Cerrar sesión">
@@ -122,7 +30,7 @@
             </div>
         </div>
 
-        <!-- ── Datos del paciente ─────────────────────────────────── -->
+        <!-- Datos del paciente -->
         <div class="dashboard-welcome" style="margin-bottom: 1.25rem;">
             <p class="dashboard-welcome-name">
                 <span th:text="${paciente.nombres}"></span>
@@ -135,30 +43,52 @@
             </p>
         </div>
 
-        <!-- ── Alertas ────────────────────────────────────────────── -->
+        <!-- Alertas -->
         <div th:if="${exito}" class="alert-exito" role="alert" th:text="${exito}"></div>
         <div th:if="${error}"  class="alert-error"  role="alert" th:text="${error}"></div>
 
-        <!-- ── Formulario ─────────────────────────────────────────── -->
+        <!-- Formulario -->
         <form th:action="@{/consulta/motivo/{id}(id=${paciente.id})}" method="post" id="formMotivo">
 
-            <!-- Descripción de síntomas -->
+            <!-- Descripción de síntomas (AC-1 HU-024) -->
             <div style="margin-bottom: 1rem;">
                 <label for="descripcionSintomas" class="form-label-ips">
                     Descripción de los síntomas <span class="required">*</span>
                 </label>
                 <textarea id="descripcionSintomas"
                           name="descripcionSintomas"
-                          class="input-login"
+                          class="textarea-ips"
                           rows="3"
-                          placeholder="Texto"
+                          placeholder="Describa los síntomas del paciente (mínimo 10 caracteres)..."
                           required
-                          style="resize: vertical; min-height: 80px;"></textarea>
+                          minlength="10"></textarea>
+            </div>
+
+            <!-- AC-6 HU-025: diagnóstico CIE-10 con modal Bootstrap -->
+            <div style="margin-bottom: 1.25rem;">
+                <label class="form-label-ips">Diagnóstico CIE-10</label>
+                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                    <input type="hidden" id="codigoCIE10" name="codigoCIE10">
+                    <span id="cie10Seleccionado"
+                          style="font-size:0.88rem; color:#1b3a5c; font-weight:600; min-width:60px;">
+                        Sin diagnóstico
+                    </span>
+                    <button type="button" class="btn-acceder"
+                            style="font-size:0.8rem; padding:6px 14px;"
+                            data-bs-toggle="modal" data-bs-target="#modalCIE10">
+                        Buscar diagnóstico
+                    </button>
+                    <button type="button" id="btnLimpiarCIE"
+                            onclick="limpiarCIE10()"
+                            style="font-size:0.78rem; padding:5px 10px; background:#6b7280;
+                                   color:#fff; border:none; border-radius:8px; cursor:pointer; display:none;">
+                        ✕ Quitar
+                    </button>
+                </div>
             </div>
 
             <!-- Síntomas con severidad -->
             <div class="sintomas-grid">
-                <!-- Fiebre -->
                 <div class="sintoma-item">
                     <label for="fiebre">Fiebre</label>
                     <select id="fiebre" name="fiebre" class="sintoma-select">
@@ -166,7 +96,6 @@
                         <option th:each="s : ${severidades}" th:value="${s}" th:text="${s}"></option>
                     </select>
                 </div>
-                <!-- Tos -->
                 <div class="sintoma-item">
                     <label for="tos">Tos</label>
                     <select id="tos" name="tos" class="sintoma-select">
@@ -174,7 +103,6 @@
                         <option th:each="s : ${severidades}" th:value="${s}" th:text="${s}"></option>
                     </select>
                 </div>
-                <!-- Dolor abdominal -->
                 <div class="sintoma-item">
                     <label for="dolorAbdominal">Dolor abdominal</label>
                     <select id="dolorAbdominal" name="dolorAbdominal" class="sintoma-select">
@@ -182,7 +110,6 @@
                         <option th:each="s : ${severidades}" th:value="${s}" th:text="${s}"></option>
                     </select>
                 </div>
-                <!-- Náuseas -->
                 <div class="sintoma-item">
                     <label for="nauseas">Náuseas</label>
                     <select id="nauseas" name="nauseas" class="sintoma-select">
@@ -190,7 +117,6 @@
                         <option th:each="s : ${severidades}" th:value="${s}" th:text="${s}"></option>
                     </select>
                 </div>
-                <!-- Mareo -->
                 <div class="sintoma-item">
                     <label for="mareo">Mareo</label>
                     <select id="mareo" name="mareo" class="sintoma-select">
@@ -198,7 +124,6 @@
                         <option th:each="s : ${severidades}" th:value="${s}" th:text="${s}"></option>
                     </select>
                 </div>
-                <!-- Fatiga -->
                 <div class="sintoma-item">
                     <label for="fatiga">Fatiga</label>
                     <select id="fatiga" name="fatiga" class="sintoma-select">
@@ -208,8 +133,8 @@
                 </div>
             </div>
 
-            <!-- Botones de acción -->
-            <div style="display:flex; gap:10px; margin-top:1.5rem; justify-content: flex-end;">
+            <!-- Botones (AC-8 HU-024) -->
+            <div style="display:flex; gap:10px; margin-top:1.5rem; justify-content:flex-end;">
                 <a th:href="@{/pacientes/buscar}" class="btn-volver" style="margin-top:0; align-self:center;">
                     ← Volver
                 </a>
@@ -219,14 +144,17 @@
             </div>
         </form>
 
-        <!-- ── Historial de consultas ──────────────────────────────── -->
+        <!-- AC-5 HU-025: historial con código CIE-10 visible -->
         <div th:if="${historial != null and !#lists.isEmpty(historial)}"
-             style="margin-top: 2rem; border-top: 1px solid #e5e7eb; padding-top: 1.25rem;">
-            <p class="form-label-ips" style="margin-bottom: .75rem; font-size: 0.85rem;">
+             style="margin-top:2rem; border-top:1px solid #e5e7eb; padding-top:1.25rem;">
+            <p class="form-label-ips" style="margin-bottom:.75rem; font-size:0.85rem;">
                 Consultas anteriores
             </p>
             <div th:each="m : ${historial}" class="historial-card">
                 <strong th:text="${#temporals.format(m.fechaRegistro, 'dd/MM/yyyy HH:mm')}"></strong>
+                <span th:if="${m.codigoCIE10 != null and !#strings.isEmpty(m.codigoCIE10)}"
+                      class="historial-cie"
+                      th:text="${m.codigoCIE10}"></span>
                 &nbsp;—&nbsp;
                 <span th:text="${m.descripcionSintomas}"></span>
             </div>
@@ -235,11 +163,67 @@
     </div>
 </div>
 
+<!-- AC-6 HU-025: Modal Bootstrap para buscar y seleccionar diagnóstico CIE-10 -->
+<div class="modal fade" id="modalCIE10" tabindex="-1" aria-labelledby="modalCIE10Label" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCIE10Label">Buscar diagnóstico CIE-10</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="buscadorCIE10" class="form-control mb-3"
+                       placeholder="Buscar por código o nombre (ej: J00, Influenza)..."
+                       oninput="filtrarCIE10(this.value)" autocomplete="off">
+                <div id="listaCIE10">
+                    <!-- Opciones generadas desde Thymeleaf -->
+                    <div th:each="dx : ${diagnosticoscie10}"
+                         class="cie10-modal-item"
+                         th:attr="data-codigo=${dx.codigo}, data-nombre=${dx.diagnostico}"
+                         th:onclick="'seleccionarCIE10(\'' + ${dx.codigo} + '\', \'' + ${dx.diagnostico} + '\')'">
+                        <span class="cie10-code" th:text="${dx.codigo}"></span>
+                        <span th:text="${dx.diagnostico}"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     document.getElementById('formMotivo').addEventListener('submit', function () {
         const btn = document.getElementById('btnGuardar');
         btn.disabled = true;
         btn.textContent = 'Guardando...';
+    });
+
+    function seleccionarCIE10(codigo, nombre) {
+        document.getElementById('codigoCIE10').value = codigo;
+        document.getElementById('cie10Seleccionado').textContent = codigo + ' — ' + nombre;
+        document.getElementById('btnLimpiarCIE').style.display = 'inline-block';
+        bootstrap.Modal.getInstance(document.getElementById('modalCIE10')).hide();
+    }
+
+    function limpiarCIE10() {
+        document.getElementById('codigoCIE10').value = '';
+        document.getElementById('cie10Seleccionado').textContent = 'Sin diagnóstico';
+        document.getElementById('btnLimpiarCIE').style.display = 'none';
+    }
+
+    function filtrarCIE10(q) {
+        const termino = q.toLowerCase();
+        document.querySelectorAll('#listaCIE10 .cie10-modal-item').forEach(function (item) {
+            const codigo = item.getAttribute('data-codigo').toLowerCase();
+            const nombre = item.getAttribute('data-nombre').toLowerCase();
+            item.style.display = (codigo.includes(termino) || nombre.includes(termino)) ? '' : 'none';
+        });
+    }
+
+    document.getElementById('modalCIE10').addEventListener('shown.bs.modal', function () {
+        document.getElementById('buscadorCIE10').focus();
     });
 </script>
 
