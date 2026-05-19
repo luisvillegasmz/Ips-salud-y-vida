@@ -17,7 +17,7 @@ public class ContactoClinico {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "paciente_id", nullable = false)
     private Long pacienteId;
 
     // AC-1 HU-024: Área de texto amplia para describir el motivo

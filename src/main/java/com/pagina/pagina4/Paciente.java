@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -33,9 +34,12 @@ public class Paciente {
     private String apellidos;
 
     
-    // AC-5: Fecha de nacimiento
+    // AC-5: Fecha y hora de nacimiento en columnas independientes
     @Column(nullable = false)
     private LocalDate fechaNacimiento;
+
+    @Column(name = "hora_nacimiento")
+    private LocalTime horaNacimiento;
 
     @Column
     private String estadoCivil;

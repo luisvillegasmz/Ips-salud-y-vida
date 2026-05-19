@@ -14,8 +14,10 @@
 <div class="login-wrapper" style="align-items: flex-start; padding-top: 2rem;">
     <div class="card-login card-wide">
 
-        <div class="logo-area">
-            <img th:src="@{/img/Logo.png}" src="/img/Logo.png" alt="Logo Salud y Vida IPS">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+            <img th:src="@{/img/Logo.png}" src="/img/Logo.png"
+                 alt="Logo Salud y Vida IPS" style="height:48px;">
+            <a href="/logout" class="btn-cerrar-sesion">Cerrar sesión</a>
         </div>
 
         <p class="login-title">Registro de Paciente</p>
@@ -78,13 +80,22 @@
                        pattern="[A-Za-záéíóúÁÉÍÓÚñÑ\s]{2,80}">
             </div>
 
-            <!-- Fecha de nacimiento -->
+            <!-- Fecha de nacimiento (AC-5 HU-003) -->
             <div>
                 <label for="fechaNacimiento" class="form-label-ips">
                     Fecha de nacimiento <span class="required">*</span>
                 </label>
                 <input type="date" class="input-login"
                        id="fechaNacimiento" name="fechaNacimiento" required>
+            </div>
+
+            <!-- Hora de nacimiento (AC-5 HU-003) -->
+            <div>
+                <label for="horaNacimiento" class="form-label-ips">
+                    Hora de nacimiento
+                </label>
+                <input type="time" class="input-login"
+                       id="horaNacimiento" name="horaNacimiento">
             </div>
 
             <!-- Género -->
@@ -115,7 +126,7 @@
 
             <!-- Departamento -->
             <div>
-                <label for="deptoSelect" class="form-label-ips">Departamento</label>
+                <label for="deptoSelect" class="form-label-ips">Departamento de residencia</label>
                 <select id="deptoSelect" name="departamento" class="select-ips"
                         onchange="filtrarMunicipios()">
                     <option value="">-- Seleccione --</option>
@@ -130,7 +141,7 @@
 
             <!-- Municipio (filtrado por departamento con JS) -->
             <div>
-                <label for="muniSelect" class="form-label-ips">Municipio</label>
+                <label for="muniSelect" class="form-label-ips">Municipio de residencia</label>
                 <select id="muniSelect" name="municipio" class="select-ips">
                     <option value="">-- Seleccione departamento primero --</option>
                     <option th:each="mun : ${municipios}"

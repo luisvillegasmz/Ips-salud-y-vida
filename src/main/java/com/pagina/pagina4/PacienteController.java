@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.stream.Collectors;
 
 @Controller
@@ -69,6 +70,7 @@ public class PacienteController {
             @RequestParam String nombres,
             @RequestParam String apellidos,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaNacimiento,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime horaNacimiento,
             @RequestParam(required = false) String estadoCivil,
             @RequestParam(required = false) String genero,
             @RequestParam(required = false) String departamento,
@@ -91,6 +93,7 @@ public class PacienteController {
             nuevo.setNombres(nombres.trim());
             nuevo.setApellidos(apellidos.trim());
             nuevo.setFechaNacimiento(fechaNacimiento);
+            nuevo.setHoraNacimiento(horaNacimiento);
             nuevo.setEstadoCivil(estadoCivil);
             nuevo.setGenero(genero);
             nuevo.setDepartamento(departamento);

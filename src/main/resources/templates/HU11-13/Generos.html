@@ -22,7 +22,10 @@
                     <p class="page-meta">Catálogo de géneros del sistema</p>
                 </div>
             </div>
-            <a href="/dashboard" class="btn-volver">← Volver al inicio</a>
+            <div style="display:flex; gap:8px; align-items:center;">
+                <a href="/dashboard" class="btn-volver">← Volver al inicio</a>
+                <a href="/logout" class="btn-cerrar-sesion">Cerrar sesión</a>
+            </div>
         </div>
 
         <div th:if="${exito}" class="alert alert-success py-2 px-3 mb-3" th:text="${exito}"></div>

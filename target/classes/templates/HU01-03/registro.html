@@ -13,8 +13,10 @@
 <div class="login-wrapper" style="align-items: flex-start; padding-top: 2rem;">
     <div class="card-login card-wide">
 
-        <div class="logo-area">
-            <img th:src="@{/img/Logo.png}" src="/img/Logo.png" alt="Logo Salud y Vida IPS">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+            <img th:src="@{/img/Logo.png}" src="/img/Logo.png"
+                 alt="Logo Salud y Vida IPS" style="height:48px;">
+            <a href="/logout" class="btn-cerrar-sesion">Cerrar sesión</a>
         </div>
 
         <p class="login-title">Registro de usuario</p>
